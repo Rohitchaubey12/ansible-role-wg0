@@ -1,0 +1,29 @@
+---
+- hosts: app
+  become: yes
+  tasks:
+   - apt:   
+       name:
+         - wireguard
+       update_cache: yes 
+       state: latest
+
+   - name: Generate server and client keys
+     shell: |
+       cd /etc/wireguard
+       umask 077
+       wg genkey | tee server_private_key | wg pubkey > server_public_key
+       wg genkey | tee client_private_key | wg pubkey > client_public_key
+     args:
+       executable: /bin/bash
+   - name: create an file
+     file:
+       path: /etc/wireguard/wg0.conf
+       state: touch
+
+   - name: Enable and start Wireguard service
+     service:
+       name: wg-quick@wg0
+       state: started
+       enabled: true
+

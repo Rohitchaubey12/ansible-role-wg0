@@ -1,0 +1,2 @@
+host2 ansible_host=18.142.53.61 ansible_user=ubuntu ansible_ssh_private_key_file=/home/llinux/Downloads/singapore.pem
+
